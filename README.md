@@ -1,1 +1,1 @@
-# outrage_perception
+# algorithm-literacy
