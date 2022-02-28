@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Crockett Lab</title>
+        
+        <!-- FIREBASE -->
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-database.js"></script>
+        <!--<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script> -->
+        
+
+
+
+        <script>
+          // Your web app's Firebase configuration
+          var firebaseConfig = {
+              apiKey: "AIzaSyDY9STpxiIEBtowxzZmWOr51e09CkLgg2c",
+              authDomain: "algorithm-literacy.firebaseapp.com",
+              databaseURL: "https://algorithm-literacy-default-rtdb.firebaseio.com",
+              projectId: "algorithm-literacy",
+              storageBucket: "algorithm-literacy.appspot.com",
+              messagingSenderId: "497019090005",
+              appId: "1:497019090005:web:97a87d77bc1aa8110610dc"
+          };
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig); 
+        //Create reference to the database
+        var database = firebase.database();
+        //Sign in controls
+        firebase.auth().signInAnonymously().catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+        });      
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+            }
+        });
+        </script> 
+        <!-- jsPSYCH -->
+        <script type="text/javascript" src="jspsych-6.1.0/jspsych.js"></script>
+        <script type="text/javascript" src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+        <script type="text/javascript" src="jspsych-6.1.0/plugins/jspsych-instructions.js"></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-survey-multi-select.js'></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-survey-likert.js'></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-survey-multi-choice.js'></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-html-button-response.js'></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-external-html.js'></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-survey-text.js'></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-survey-multi-choice.js'></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-html-slider-response.js'></script>
+        <script type="text/javascript" src="jspsych-6.1.0/plugins/jspsych-dropdown.js"></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-survey-multi-choice-bottom-bttn.js'></script>
+        <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+        
+        <!--Choices plugin for dropdown boxes -->
+        <!-- Include Choices CSS -->
+        <link rel="stylesheet" href="Choices/public/assets/styles/choices.min.css" />
+        <!-- Include Choices JavaScript -->
+        <script src="Choices/public/assets/scripts/choices.min.js"></script>
+        <!-- Include Choices CSS -->
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+        />
+        <!-- Or versioned -->
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/choices.min.css"
+        />
+
+        <!-- Include Choices JavaScript (latest) -->
+        <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+        <!-- Or versioned -->
+        <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
+    
+    <!--margin-right: 50px;-->
+        <!-- CSS -->
+        <style type="text/css">
+            .instructions {
+                margin-right: 300px;
+                margin-left: 300px;
+                text-align: left;
+            }
+
+            #root {
+                background-color: #eee;
+            }
+        </style>
+    
+    </head>
+
+    <body>
+        <noscript>
+            <h1>Warning: Javascript seems to be disabled</h1>
+            <p>This website requires that Javascript be enabled on your browser.</p>
+            <p>Instructions for enabling Javascript in your browser can be found
+            <a href="http://support.google.com/bin/answer.py?hl=en&answer=23852">here</a></p>
+        </noscript>
+
+    </body>
+
+    <script type='text/javascript'>
+        //Ceate timeline
+        var timeline = []; 
+        
+        // session info //
+        //var subjectId = jsPsych.data.getURLVariable('PROLIFIC_PID');
+        //var sessionId = jsPsych.data.getURLVariable('SESSION_ID');
+        //var studyId = jsPsych.data.getURLVariable('STUDY_ID');
+        //var timepoint = jsPsych.data.getURLVariable('TP');
+        var timestamp = Date.now().toString();
+        
+        var welcome = {
+            type: "instructions",
+            pages: ["<div class = 'instructions'>Welcome! In this task you will view real social media messages sent by users who discuss politics on Twitter. You will then make judgments about them.<br><br>Before we begin, please consent to participate and then answer a few questions about yourself.</div>"],
+            show_clickable_nav: true
+        };
+        timeline.push(welcome);
+        
+
+       
+        //Function to check whether consent has been given
+        var check_consent = function(elem) {
+            if (document.getElementById('consent_checkbox').checked) {
+                return true;
+            }
+            else {
+                alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+                return false;
+            }
+            return false;
+        };
+        
+        //Presents external consent page to participants
+        var consent = {
+            type:'external-html',
+            url: "consent.html",
+            cont_btn: "start",
+            check_fn: check_consent
+        };
+        timeline.push(consent);
+        
+
+        var mood = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: "We would now like you to answer some questions about yourself.</p><br>",
+            questions: [
+                {
+                    prompt: "<b>How are you feeling right now?</b>",
+                    name: "mood",
+                    options: ["<p text-align:center;><img src='img/mood_1.png'>", "<p text-align:center;><img src='img/mood_2.png'>", "<p text-align:center;><img src='img/mood_3.png'>", "<p text-align:center;><img src='img/mood_4.png'>", "<p text-align:center;><img src='img/mood_5.png'>", "<p text-align:center;><img src='img/mood_6.png'>"],
+                    horizontal: true,
+                    required: false,
+                    request_response: true
+
+                }
+            ],
+            button_label: "Next"
+        };
+        timeline.push(mood);
+        
+        var gndr= {
+            type: "survey-text",
+            questions: [
+                    {
+                        prompt: "<b>What is your gender?</b>",
+                        name: "gender",
+                        required: false
+                    }
+                ],
+            button_label: "Next",
+            request_response: true
+        };
+        timeline.push(gndr);
+        
+        var ethnicity = {
+            type: "dropdown",
+            questions: [
+                {
+                    text: "<b>What categories below describe you?</b> Please select all that apply. Click the box below to display all options.",
+                    options: ["American Indian or Alaska Native ", "Asian", "Black or African American", "Hispanic, Latinx, or Spanish origin", "Middle Eastern or North African", "Native Hawaiian or Other Pacific Islander", "White",   "Other", "Prefer not to say"],
+                    allowMultipleSelections: true,
+                    required: false,
+                    placeholder: "Select response",
+                    name: "ethnicity"
+
+                }
+            ],
+            request_response: true
+        };
+        timeline.push(ethnicity);
+        
+        
+        var age= {
+            type: "survey-text",
+            questions: [
+                    {
+                        prompt: "<b>How old are you?</b>",
+                        name: "age",
+                        required: false
+                    }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(age);
+
+        var edu = {
+            type: "dropdown",
+            questions: [
+                {
+                    text: "<br><br><b>What is the highest level of education you have completed?</b>",
+                    options: ["Some high school","High school", "Some college", "2 year degree", "4 year degree", "Postgraduate/Professional degree/other", "Prefer not to say"],
+                    allowMultipleSelections: false,
+                    required: false,
+                    placeholder: "Select response",
+                    name: "education"
+                }
+            ]
+        };
+        timeline.push(edu)
+        
+        //var chosen_party = jsPsych.randomization.sampleWithoutReplacement(['Republican', 'Democrat'], 1)[0]
+        
+        var party = {
+            type: "survey-multi-choice-bottom-bttn",
+            questions: [
+                {
+                    prompt: "<b>Politically speaking, which party do you identify with more strongly?</b>",
+                    name: "party",
+                    options: ["<p text-align:center;>Democrat", "<p text-align:center;>Republican", "<p text-align:center;>An Independent", "<p text-align:center;>Other", "<p text-align:center;>None", "<p text-align:center;>Prefer not to say"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next"
+        };
+        timeline.push(party);
+        
+        var demos_ideo = {
+            type: "survey-multi-choice-bottom-bttn",
+            questions: [
+                {
+                    prompt: "<b>How would you describe your political ideology?</b>",
+                    name: "p_ideology",
+                    options: ["<p text-align:center;>Extremely liberal</p><p text-align:center;>1",
+                              "<p text-align:center;><br></p><p text-align:center;>2",
+                              "<p text-align:center;>Moderately liberal</p><p text-align:center;>3",
+                              "<p text-align:center;>Neither</p><p text-align:center;>4",
+                              "<p text-align:center;>Moderately conservative</p><p text-align:center;>5",
+                              "<p text-align:center;><br></p><p text-align:center;>6",
+                              "<p text-align:center;>Extremely conservative</p><p text-align:center;>7"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next"
+        };
+        timeline.push(demos_ideo);
+        
+        
+        var pages_exp = [
+            [
+                "<div class = 'instructions'>You are now ready to begin the task. In this task you will view real social media messages sent from an online social network.<br><br>Your job is to <b>pay attention to what types of messages appear in the network</b> (e.g., how do people express themselves?), and then <b>make judgments about what messages seem most appropriate to post</b> in that network.<br><br>The first part of the task is for you to learn information.<br><br>The second task is for you to make judgments about messages you see.<br><br></div>"
+            ],
+            [
+                 "<div class = 'instructions'>In the first part of the task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.<br><br></div>"
+            ],
+            [
+                 "<div class = 'instructions'>Press next to learn about some features of social media.<br><br></div>"
+
+            ]
+        ]
+
+        
+        var intro_exp = {
+            type:'instructions',
+            pages: pages_exp,
+            show_clickable_nav:true
+        };
+        timeline.push(intro_exp)
+        
+         
+        var condition_algo = jsPsych.randomization.sampleWithoutReplacement(['intervention', 'control'], 1)[0]        
+
+       // var condition = 'intervention'
+        
+        if (condition_algo=='intervention'){
+            
+            var intervention = {
+                type: "instructions",
+                pages: [
+                    ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>. </li></ul></div>"],
+                    
+                    ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>.</li><br><li><b>Algorithms</b> use online data (e.g., things you have clicked on in the past, what is popular at the moment) to predict the types of posts that are likely to keep you spending more time on the social media platform. </li></ul></div>"],
+                    
+                    ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>.</li><br><li><b>Algorithms</b> use online data (e.g., things you have clicked on in the past, what is popular at the moment) to predict the types of posts that are likely to keep you spending more time on the social media platform. </li> <br><li>By promoting certain posts over others, <b>these algorithms amplify the visibility of certain posts while reducing the visibility of others.</b> </li></ul></div>"],
+                    
+                    ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>.</li><br><li><b>Algorithms</b> use online data (e.g., things you have clicked on in the past, what is popular at the moment) to predict the types of posts that are likely to keep you spending more time on the social media platform. </li><br> <li>By promoting certain posts over others, <b>these algorithms amplify the visibility of certain posts while reducing the visibility of others.</b></li><br><li>For example, <b>algorithms may amplify extreme political content more than moderate political content</b>, or they may amplify posts that fit with your opinions more than posts that go against your opinions.</li></ul></div>"],
+
+                ],
+                show_clickable_nav:true
+                
+            };
+            timeline.push(intervention);
+            
+             
+            var attn_check_options_intervention = [
+                    "The erroneous removal of followers and friends", 
+                    "The amplification of some posts and the reduction of others",
+                    "The lucrative profit model that emerges on the platforms naturally",
+                    "The loss of privacy that many users have experienced while using the platforms"
+                ]
+            
+            var attn_check_intervention = {
+                type: "survey-multi-choice",
+                questions: [
+                    {
+                        prompt: "<b>Which of the following consequences of social media algorithms did you read about?</b>",
+                        name: "attention_check_intervention",
+                        options: jsPsych.randomization.sampleWithoutReplacement(attn_check_options_intervention, 4),
+                        horizontal: false,
+                        required: false,
+                        randomize_question_order: true
+                    }
+                ],
+                button_label: "Next"
+            };
+            timeline.push(attn_check_intervention);
+            
+        } else {
+            
+            var control = {
+                type: "instructions",
+                pages: [
+                    ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>. </li></ul></div>"],
+                    
+                    ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>.</li><br><li>These posts can contain images, text, or links to other websites, and can come from people you know or from people you don’t know.</li></ul></div>"],
+                    
+                    ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>.</li><br><li>These posts can contain images, text, or links to other websites, and can come from people you know or from people you don’t know.</li> <br><li>A user on social media can interact with posts in various ways, such as by <b>commenting, liking or sharing the post</b>.</li></ul></div>"],
+                    
+                    ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>.</li><br><li>These posts can contain images, text, or links to other websites, and can come from people you know or from people you don’t know.</li><br> <li>A user on social media can interact with posts in various ways, such as by <b>commenting, liking or sharing the post</b>.</li><br><li>For example, a user can share a news article they see on their social media newsfeed, and it <b>may be seen by their followers or friends</b>.</li></ul></div>"],
+
+                ],
+                show_clickable_nav:true
+                
+            };
+            timeline.push(control);
+            
+             
+            var attn_check_options_control = [
+                    "Commenting on the post", 
+                    "Liking the post",
+                    "Sharing the post",
+                    "Selling the post for bitcoin"
+                ]
+            
+            var attn_check_control = {
+                type: "survey-multi-choice",
+                questions: [
+                    {
+                        prompt: "<b>Which of the following is NOT a way that people can interact with a post on social media within the platforms?</b>",
+                        name: "attention_check_control",
+                        options: jsPsych.randomization.sampleWithoutReplacement(attn_check_options_control, 4),
+                        horizontal: false,
+                        required: false,
+                        randomize_question_order: true
+                    }
+                ],
+                button_label: "Next"
+            };
+            timeline.push(attn_check_control);
+            
+        }
+        
+        var pages_p2 = [
+            [
+                "<div class = 'instructions'><b>Welcome to the second part of this task.</b><br><br>You will see a real social media feed about politics from the past year, including:<b><ul><li>Amy Coney Barrett Supreme Court confirmation</li><li>William Barr Congressional testimony</li><li>Attitudes toward Donald Trump </li><li>Social media messages targeted at U.S. Senators</li></ul></b>The messages are collected from various people who belong to the same online social network. When you make judgments about the social network, remember to <i>make those judgments independent of whether you agree with the messages that you see</i>.<br><br>Press next to read a quick summary of the topics in case you are not familiar with them. This will help you better understand the context of the tweets.</div>"
+            ],
+            [
+                "<div class = 'instructions'>You might see tweets about the <b>Amy Coney Barrett Supreme Court confirmation</b>. Amy Coney Barrett is the new <i>conservative</i> Supreme Court justice appointed by President Donald Trump. Her confirmation makes the ideological makeup of Supreme Court lean <i>heavily conservative</i>. Whether or not this is good for America is debated by liberals and conservatives.</div><br><img src='img/barrett.png'>"
+            ],
+            [
+                "<div class = 'instructions'>You might see tweets about the <b>William (Bill) Barr testimony to congress</b> in late July, 2020. William Bill Barr is a <i>Republican</i> and <i>conservative</i> U.S. Attorney General, appointed by President Trump. Bill Barr has played a pivotal role in controversial political decisions, such as alleged interventions to soften charges against Trump's political allies and facilitating recent deployment of federal agents in Portland to arrest protesters. During the testimony, Democrats accused Barr of corrupt political actions, while Barr and Republicans claimed the Democrats were making false claims for political gains.</div><br><img src='img/barr.png'>"
+            ],
+            [
+                "<div class = 'instructions'>You might also see tweets about people's opinions about <b>voting</b>, including discussion of voter turnout, voter suppression etc. You might also see tweets about <b>Trump</b>, <b>Biden</b>, or tweets about other <b>U.S. Senators</b>.</div><br><img src='img/biden_trump.png'>"
+            ]
+        ]
+        
+        var intro_p2 = {
+            type:'instructions',
+            pages: pages_p2,
+            show_clickable_nav:true
+        };
+        timeline.push(intro_p2);
+        
+        
+        var attn_check_options_barrett = [
+                        "Amy Coney Barrett is the newly confirmed conservative Supreme Court Justice",
+                        "Amy Coney Barrett is a retired U.S. Navy Seal who is running for political office",
+                        "Amy Coney Barrett is a former conservative US Attorney General who recently gave testimony to Congress",
+                        "Amy Coney Barrett is the first female to be appointed as U.S. District Attorney"
+                    ]
+        
+        var attn_check_options_barr = [
+                        "William (Bill) Barr is the newly confirmed conservative Supreme Court Justice",
+                        "William (Bill) Barr is a retired U.S. Navy Seal who is running for political office",
+                        "William (Bill) Barr is a former conservative US Attorney General who recently gave testimony to Congress",
+                        "William (Bill) Barr is the first female to be appointed as U.S. District Attorney"
+                    ]
+        
+        var attn_check_barrett = {
+            type: "survey-multi-choice",
+            questions: [
+                {
+                    prompt: "<b>To show that you have read the instructions, please select the correct answer below about Amy Coney Barrett:</b>",
+                    name: "attention_check_barrett",
+                    options: jsPsych.randomization.sampleWithoutReplacement(attn_check_options_barrett, 4),
+                    horizontal: false,
+                    required: false,
+                    randomize_question_order: true
+                }
+            ],
+            button_label: "Next"
+        };
+        timeline.push(attn_check_barrett);
+        
+        var attn_check_barr = {
+            type: "survey-multi-choice",
+            questions: [
+                {
+                    prompt: "<b>To show that you have read the instructions, please select the correct answer below about William (Bill) Barr:</b>",
+                    name: "attention_check_barr",
+                    options: jsPsych.randomization.sampleWithoutReplacement(attn_check_options_barr, 4),
+                    horizontal: false,
+                    required: false,
+                    randomize_question_order: true
+                }
+            ],
+            button_label: "Next"
+        };
+        timeline.push(attn_check_barr);
+    
+        
+        var instruct = {
+            type: "instructions",
+            pages: ["<div class = 'instructions'>Great! You are now ready to begin the task. Press next to see a social media feed from a specific online social network. You will see about 10 Twitter messages (tweets) in total.<br><br><b>Please pay attention and read all the tweets as you will receive a memory test at the end of the task.</b><br><br>Press next to begin.</div>"],
+            show_clickable_nav: true
+        };
+        timeline.push(instruct);
+        
+        //var condition = jsPsych.randomization.sampleWithoutReplacement(['op', 'up'], 1)[0]
+        var demo_op = ['<p><img src="img/demo_op/Dem_Over_135.png"></p>', '<p><img src="img/demo_op/Dem_Over_42_1.png"></p>', '<p><img src="img/demo_op/Dem_Over_41_1.png"></p>', '<p><img src="img/demo_op/Dem_Over_61_1.png"></p>', '<p><img src="img/demo_op/Dem_Over_189.png"></p>', '<p><img src="img/demo_op/Dem_Over_30.png"></p>', '<p><img src="img/demo_op/Dem_Over_34.png"></p>', '<p><img src="img/demo_op/Dem_Over_51.png"></p>', '<p><img src="img/demo_op/Dem_Over_45.png"></p>', '<p><img src="img/demo_op/Dem_Over_42.png"></p>'];
+        
+        var demo_up = ['<p><img src="img/demo_up/Dem_Under_172.png"></p>', '<p><img src="img/demo_up/Dem_Under_163.png"></p>', '<p><img src="img/demo_up/Dem_Under_113.png"></p>', '<p><img src="img/demo_up/Dem_Under_95_1.png"></p>', '<p><img src="img/demo_up/Dem_Under_122_1.png"></p>', '<p><img src="img/demo_up/Dem_Under_100_1.png"></p>', '<p><img src="img/demo_up/Dem_Under_131.png"></p>', '<p><img src="img/demo_up/Dem_Under_191.png"></p>', '<p><img src="img/demo_up/Dem_Under_132_1.png"></p>', '<p><img src="img/demo_up/Dem_Under_78_1.png"></p>'];
+        
+        var rep_op = ['<p><img src="img/rep_op/Rep_Over_69.png"></p>', '<p><img src="img/rep_op/Rep_Over_85.png"></p>', '<p><img src="img/rep_op/Rep_Over_90.png"></p>', '<p><img src="img/rep_op/Rep_Over_143.png"></p>', '<p><img src="img/rep_op/Rep_Over_22.png"></p>', '<p><img src="img/rep_op/Rep_Over_114.png"></p>', '<p><img src="img/rep_op/Rep_Over_35_1.png"></p>', '<p><img src="img/rep_op/Rep_Over_93_1.png"></p>', '<p><img src="img/rep_op/Rep_Over_60.png"></p>', '<p><img src="img/rep_op/Rep_Over_72.png"></p>'];
+        
+        var rep_up = ['<p><img src="img/rep_up/Rep_Under_36_1.png"></p>', '<p><img src="img/rep_up/Rep_Under_136_1.png"></p>', '<p><img src="img/rep_up/Rep_Under_115_1.png"></p>', '<p><img src="img/rep_up/Rep_Under_101.png"></p>', '<p><img src="img/rep_up/Rep_Under_27.png"></p>', '<p><img src="img/rep_up/Rep_Under_120_1.png"></p>', '<p><img src="img/rep_up/Rep_Under_53.png"></p>', '<p><img src="img/rep_up/Rep_Under_103_1.png"></p>', '<p><img src="img/rep_up/Rep_Under_186.png"></p>', '<p><img src="img/rep_up/Rep_Under_168.png"></p>'];
+        
+        var norm_dem = ['<p><img src="img/norm_dem/dem_low_103.png"></p>', '<p><img src="img/norm_dem/dem_low_n3.png"></p>', '<p><img src="img/norm_dem/dem_high_10.png"></p>', '<p><img src="img/norm_dem/dem_low_n2.png"></p>', '<p><img src="img/norm_dem/dem_low_n1.png"></p>', '<p><img src="img/norm_dem/dem_low_n4.png"></p>', '<p><img src="img/norm_dem/dem_high_36.png"></p>', '<p><img src="img/norm_dem/dem_high_52.png"></p>', '<p><img src="img/norm_dem/dem_high_93.png"></p>', '<p><img src="img/norm_dem/dem_high_94.png"></p>'];
+        
+        var norm_rep = ['<p><img src="img/norm_rep/rep_high_27_1.png"></p>', '<p><img src="img/norm_rep/rep_low_n3.png"></p>', '<p><img src="img/norm_rep/rep_low_n2.png"></p>', '<p><img src="img/norm_rep/rep_low_n1.png"></p>', '<p><img src="img/norm_rep/rep_high_64_1.png"></p>', '<p><img src="img/norm_rep/rep_high_157.png"></p>', '<p><img src="img/norm_rep/rep_high_26_1.png"></p>', '<p><img src="img/norm_rep/rep_low_122.png"></p>', '<p><img src="img/norm_rep/rep_low_1.png"></p>', '<p><img src="img/norm_rep/rep_high_9_1.png"></p>'];
+        
+//      var norm = ['<p><img src="img/norm/1.png"></p>', '<p><img src="img/norm/2.png"></p>', '<p><img src="img/norm/3.png"></p>', '<p><img src="img/norm/4.png"></p>', '<p><img src="img/norm/5.png"></p>', '<p><img src="img/norm/6.png"></p>', '<p><img src="img/norm/7.png"></p>', '<p><img src="img/norm/8.png"></p>', '<p><img src="img/norm/9.png"></p>', '<p><img src="img/norm/10.png"></p>', '<p><img src="img/norm/11.png"></p>', '<p><img src="img/norm/12.png"></p>', '<p><img src="img/norm/13.png"></p>', '<p><img src="img/norm/14.png"></p>', '<p><img src="img/norm/15.png"></p>', '<p><img src="img/norm/16.png"></p>', '<p><img src="img/norm/17.png"></p>', '<p><img src="img/norm/18.png"></p>', '<p><img src="img/norm/19.png"></p>', '<p><img src="img/norm/20.png"></p>',]
+        
+        var condition = jsPsych.randomization.sampleWithoutReplacement(['op', 'up'], 1)[0]
+        var memory_seen;
+        var memory_unseen;
+        var appropriate_network;
+        
+        var scroll = {
+            type: 'html-button-response',
+            stimulus: function() {
+                var chosen_party = jsPsych.data.get().last(9).values()[0].responses;
+                console.log(chosen_party);
+                if (!chosen_party.includes("Republican") && condition == "op") {
+                    scroll_network = jsPsych.randomization.shuffle(demo_op);
+                    memory_seen = jsPsych.randomization.sampleWithoutReplacement(scroll_network, 1)[0]
+                    memory_unseen = jsPsych.randomization.sampleWithoutReplacement(demo_up, 1)[0]
+                    scroll_network = [scroll_network.join('<br><br>')];
+                    appropriate_network = jsPsych.randomization.shuffle(norm_dem);
+                } else if (!chosen_party.includes("Republican") && condition == "up") {
+                    scroll_network = jsPsych.randomization.shuffle(demo_up);
+                    memory_seen = jsPsych.randomization.sampleWithoutReplacement(scroll_network, 1)[0]
+                    memory_unseen = jsPsych.randomization.sampleWithoutReplacement(demo_op, 1)[0]
+                    scroll_network = [scroll_network.join('<br><br>')];
+                    appropriate_network = jsPsych.randomization.shuffle(norm_dem);
+                } else if (chosen_party.includes("Republican") && condition == "op") {
+                    scroll_network = jsPsych.randomization.shuffle(rep_op);
+                    memory_seen = jsPsych.randomization.sampleWithoutReplacement(scroll_network, 1)[0]
+                    memory_unseen = jsPsych.randomization.sampleWithoutReplacement(rep_up, 1)[0]
+                    scroll_network = [scroll_network.join('<br><br>')];
+                    appropriate_network = jsPsych.randomization.shuffle(norm_rep);
+                } else if (chosen_party.includes("Republican") && condition == "up") {
+                    scroll_network = jsPsych.randomization.shuffle(rep_up);
+                    memory_seen = jsPsych.randomization.sampleWithoutReplacement(scroll_network, 1)[0]
+                    memory_unseen = jsPsych.randomization.sampleWithoutReplacement(rep_op, 1)[0]
+                    scroll_network = [scroll_network.join('<br><br>')];
+                    appropriate_network = jsPsych.randomization.shuffle(norm_rep);
+                }
+                return scroll_network;
+            },
+            choices: ['Next'],
+            name: "scroll_task",
+            on_finish: function(data) {
+                data.condition = condition
+                data.seen = memory_seen
+                data.unseen = memory_unseen
+                data.scroll = scroll_network
+                data.norm = appropriate_network
+            }
+        };
+        timeline.push(scroll);
+        
+        var transition_1 = {
+            type: "instructions",
+            pages: ["<div class = 'instructions'>You just viewed 10 tweets that were sent by people in the same social network. Now please answer some questions about that social network.</div>"],
+            show_clickable_nav: true
+        };
+        timeline.push(transition_1);
+        
+        function range(size, startAt = 0) {
+            return [...Array(size).keys()].map(i => i + startAt);
+        }
+        
+        var feel_rep = {
+            type: "html-slider-response",
+            stimulus: "<b>On average how do you think the <i>people in this network</i> feel about <span style='color: #e63946'>Republicans?</b></span>",
+            labels:["1<br>Very cold and unfavorable", "50<br>No feeling at all", "100<br>Very warm and favorable feeling"],
+            require_movement: false,
+            name: "network_feeling_republicans",
+            slider_width: 800,
+            min: 0,
+            max: 100,
+            step: 1,
+            start: 50
+        };
+        timeline.push(feel_rep);
+        
+        var feel_demo = {
+            type: "html-slider-response",
+            stimulus: "<b>On average how do you think the <i>people in this network</i> feel about <span style='color: #457b9d'>Democrats?</b></span>",
+            labels:["1<br>Very cold and unfavorable", "50<br>No feeling at all", "100<br>Very warm and favorable feeling"],
+            name: "network_feeling_democrats",
+            require_movement: false,
+            slider_width: 800,
+            min: 0,
+            max: 100,
+            step: 1,
+            start: 50
+        };
+        timeline.push(feel_demo);
+        
+        var net_ideo = {
+            type: "survey-multi-choice-bottom-bttn",
+            questions: [
+                {
+                    prompt: "What do you think the <b>political ideology</b> of the typical person in the network is?",
+                    options: ["<p text-align:center;>Extremely liberal</p><p text-align:center;>1",
+                              "<p text-align:center;><br></p><p text-align:center;>2",
+                              "<p text-align:center;>Moderately liberal</p><p text-align:center;>3",
+                              "<p text-align:center;>Neither</p><p text-align:center;>4",
+                              "<p text-align:center;>Moderately conservative</p><p text-align:center;>5",
+                              "<p text-align:center;><br></p><p text-align:center;>6",
+                              "<p text-align:center;>Extremely conservative</p><p text-align:center;>7"],
+                    horizontal: true,
+                    required: false,
+                    name: "network ideology"
+                    }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(net_ideo);
+        
+        var transition_2 = {
+            type: "instructions",
+            pages: ["<div class = 'instructions'>Next we would like you to view some new tweets. For each one, we would like you to tell us <b>how socially appropriate or inappropriate it would be to post to the social media network that sent the messages you recently viewed</b>.</div>"],
+            show_clickable_nav: true
+        };
+        timeline.push(transition_2);
+        
+        //var appropriate_network = jsPsych.randomization.shuffle(norm);    
+        var appropriate_trial1 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[0]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[0];
+                data.order = 1;
+            }
+        };
+        timeline.push(appropriate_trial1);
+            
+        var break_trial1 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial1);
+
+        var appropriate_trial2 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[1]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[1];
+                data.order = 2;
+            }
+        };
+        timeline.push(appropriate_trial2);
+            
+        var break_trial2 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial2);
+        
+        
+        var appropriate_trial3 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[2]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[2];
+                data.order = 3;
+            }
+        };
+        timeline.push(appropriate_trial3);
+            
+        var break_trial3 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial3);
+        
+        
+        var appropriate_trial4 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[3]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[3];
+                data.order = 4;
+            }
+        };
+        timeline.push(appropriate_trial4);
+            
+        var break_trial4 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial4);
+        
+        
+        var appropriate_trial5 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[4]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[4];
+                data.order = 5;
+            }
+        };
+        timeline.push(appropriate_trial5);
+            
+        var break_trial5 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial5);
+        
+        
+        var appropriate_trial6 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[5]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[5];
+                data.order = 6;
+            }
+        };
+        timeline.push(appropriate_trial6);
+            
+        var break_trial6 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial6);
+        
+        
+        var appropriate_trial7 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[6]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[6];
+                data.order = 7;
+            }
+        };
+        timeline.push(appropriate_trial7);
+            
+        var break_trial7 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial7);
+        
+        
+        var appropriate_trial8 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[7]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[7];
+                data.order = 8;
+            }
+        };
+        timeline.push(appropriate_trial8);
+            
+        var break_trial8 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial8);
+        
+        
+        var appropriate_trial9 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[8]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[8];
+                data.order = 9;
+            }
+        };
+        timeline.push(appropriate_trial9);
+            
+        var break_trial9 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial9);
+        
+        
+        var appropriate_trial10 = {
+            type: "survey-multi-choice-bottom-bttn",
+            preamble: function() {return appropriate_network[9]},
+            questions: [
+                {
+                    prompt: "How <b>socially appropriate/inappropriate</b> would it be for someone to post this tweet to the social media network that sent the messages you recently viewed?<br><br>",
+                    name: "appropriate_trial1",
+                    options: ["<p text-align:center;>Very socially inappropriate</p><p text-align:center;>-3", "<p text-align:center;><br></p><p text-align:center;>-2", "<p text-align:center;>Somewhat socially inappropriate</p><p text-align:center;>-1", "<p text-align:center;><br></p><p text-align:center;>0", "<p text-align:center;>Somewhat socially appropriate</p><p text-align:center;>1", "<p text-align:center;><br></p><p text-align:center;>2",
+                                 "<p text-align:center;>Very socially appropriate</p><p text-align:center;>3"],
+                    horizontal: true,
+                    required: false
+                }
+            ],
+            button_label: "Next",
+            on_finish: function(data){
+                data.stim = appropriate_network[9];
+                data.order = 10;
+            }
+        };
+        timeline.push(appropriate_trial10);
+            
+        var break_trial10 = {
+            type: 'html-keyboard-response',
+            stimulus: "",
+            choices: [""],
+            trial_duration: 500,
+            response_ends_trial: false,
+            name: "break_trial1",
+        };
+        timeline.push(break_trial10);
+        
+        
+        var transition_3 = {
+            type: "instructions",
+            pages: ["<div class = 'instructions'>Thank you for completing the main task. Now please answer some more questions about yourself.</div>"],
+            show_clickable_nav: true
+        };
+        
+        timeline.push(transition_3);
+        
+        var party_identity = {
+            type: "survey-multi-choice",
+            preamble: "Consider the following sentences and rate how much you agree:</div>",
+            questions: [
+                {
+                    prompt: ['<b>"I identify with <span style="color: #e63946">Republicans</span>.</b>"'],
+                    options: ["-3 Fully disagree", '-2', '-1', '0', '1', '2', "3 Fully agree"],
+                    horizontal: true,
+                    required: false,
+                    name: "identity_republican"
+                },
+                {
+                    prompt: ['<b>"I identify with <span style="color: #457b9d">Democrats</span>.</b>"'],
+                    options:["-3 Fully disagree", '-2', '-1', '0', '1', '2', "3 Fully agree"],
+                    horizontal: true,
+                    required: false,
+                    name: "identity_democrat"
+                }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(party_identity);
+        
+        var feel_rep_self = {
+            type: "html-slider-response",
+            stimulus: "How would you rate <i>your</i> feelings towards <span style='color: #e63946'><b>Republicans?</b></span>",
+            labels:["1<br>Very cold and unfavorable", "50<br>No feeling at all", "100<br>Very warm and favorable feeling"],
+            require_movement: false,
+            name: "feelings_republicans",
+            slider_width: 800,
+            min: 0,
+            max: 100,
+            step: 1,
+            start: 50
+        };
+        timeline.push(feel_rep_self);
+        
+        var feel_demo_self = {
+            type: "html-slider-response",
+            stimulus: "How would you rate <i>your</i> feelings towards <span style='color: #457b9d'><b>Democrats?</b></span>",
+            labels:["1<br>Very cold and unfavorable", "50<br>No feeling at all", "100<br>Very warm and favorable feeling"],
+            require_movement: false,
+            name: "feelings_democrats",
+            slider_width: 800,
+            min: 0,
+            max: 100,
+            step: 1,
+            start: 50
+        };
+        timeline.push(feel_demo_self);
+        
+        var feel_rep_demo = {
+            type: "html-slider-response",
+            stimulus: "How do you think <span style='color: #e63946'><b>Republicans</b></span> feel towards <span style='color: #457b9d'><b>Democrats</b></span>?",
+            labels:["1<br>Very cold and unfavorable", "50<br>No feeling at all", "100<br>Very warm and favorable feeling"],
+            require_movement: false,
+            name: "republicans_feelings_democrats",
+            slider_width: 800,
+            min: 0,
+            max: 100,
+            step: 1,
+            start: 50
+        };
+        timeline.push(feel_rep_demo);
+        
+        var feel_demo_rep = {
+            type: "html-slider-response",
+            stimulus: "How do you think <span style='color: #457b9d'><b>Democrats</b></span> feel towards <span style='color: #e63946'><b>Republicans</b></span>?",
+            labels:["1<br>Very cold and unfavorable", "50<br>No feeling at all", "100<br>Very warm and favorable feeling"],
+            name: "democrats_feelings_republicans",
+            require_movement: false,
+            slider_width: 800,
+            min: 0,
+            max: 100,
+            step: 1,
+            start: 50
+        };
+        timeline.push(feel_demo_rep);
+        
+        var follow_politics = {
+            type: "survey-multi-choice",
+            questions: [
+                {
+                    prompt: ['<b>Generally speaking, how closely do you follow politics?</b>'],
+                    options: ["-3 Not closely at all", '-2', '-1', "0 Moderately closely", '1', '2', "3 Very closely"],
+                    horizontal: false,
+                    name: "follow_politics",
+                    required: false
+                },
+                {
+                    prompt: ['<b>Did you vote in the 2016 United States Presidential Election</b>'],
+                    options: ["Yes", "No", "Uncertain / Do not remember", "Prefer not to say"],
+                    name: "vote_2016",
+                    horizontal: false,
+                    required: false
+                },
+                {
+                    prompt: ['<b>Did you vote in the 2018 United States midterm elections</b>'],
+                    options: ["Yes", "No", "Uncertain / Do not remember", "Prefer not to say"],
+                    name: "vote_2018",
+                    horizontal: false,
+                    required: false
+                },
+                {
+                    prompt: ['<b>Who did you vote for in the 2020 United States Presidential Election</b>'],
+                    options: ["Democrat Joe Biden", "Republican Donald Trump", "Other", "I did not vote", "Uncertain / Do not remember", "Prefer not to say"],
+                    horizontal: false,
+                    name: "vote_2020",
+                    required: false
+                }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(follow_politics);
+        
+        var know_barrett = {
+            type: "survey-multi-choice",
+            questions: [
+                {
+                    prompt: ['<b>Related to the messages you saw today, how familiar are you with the Amy Coney Barrett Supreme Court confirmation?</b>'],
+                    options: ["-3 Not at all familiar", '-2', '-1', "0 Somewhat familiar", '1', '2', "3 Very familiar"],
+                    horizontal: false,
+                    name: "familiar_barrett",
+                    required: false
+                },
+                {
+                    prompt: ['<b>At any point have you posted about Amy Coney Barrett or the Supreme Court confirmation on social media?</b>'],
+                    options: ["Yes", "No", "Uncertain / Do not remember", "Prefer not to say"],
+                    horizontal: false,
+                     name: "post_barrett",
+                    required: false
+                }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(know_barrett);
+        
+        var know_barr = {
+            type: "survey-multi-choice",
+            questions: [
+                {
+                    prompt: ["<b>Related to the messages you saw today, how familiar are you with William (Bill) Barr's testimony to congress?</b>"],
+                    options: ["-3 Not at all familiar", '-2', '-1', "0 Somewhat familiar", '1', '2', "3 Very familiar"],
+                    horizontal: false,
+                     name: "familiar_barr",
+                    required: false
+                },
+                {
+                    prompt: ["<b>At any point have you posted about William (Bill) Barr's testimony to congress on social media?</b>"],
+                    options: ["Yes", "No", "Uncertain / Do not remember", "Prefer not to say"],
+                     name: "post_barr",
+                    horizontal: false,
+                    required: false
+                }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(know_barr);
+        
+        var social_media = {
+            type: "survey-multi-choice",
+            questions: [
+                {
+                    prompt: ['<b>How often do you use social media?</b>"'],
+                    options: ["Daily or more", "4-6 times a week", "2-3 times a week", "Once per week", "Between once per week and once per month", "Between once per month and once per year", "Never"],
+                    horizontal: false,
+                     name: "sm_frequency",
+                    required: false
+                }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(social_media);
+
+        var daily_social_media = {
+            type: "html-slider-response",
+            stimulus: "If you use social media daily or more, use the slider to indicate how many times per day you tend to use social media. If you do not use social media daily or more, then move the slider to 0.",
+            labels: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            require_movement: false,
+            name: "sm_frequency_daily",
+            slider_width: 800,
+            min: 0,
+            max: 100,
+            step: 1,
+            start: 50
+        };
+        timeline.push(daily_social_media);
+        
+        var social_media_politics = {
+            type: "survey-multi-choice",
+            questions: [
+                {
+                    prompt: ['<b>How often do you use social media specifically to <u>view or learn about political content</u>?</b>"'],
+                    options: ["Daily or more", "4-6 times a week", "2-3 times a week", "Once per week", "Between once per week and once per month", "Between once per month and once per year", "Never"],
+                    horizontal: false,
+                    name: "sm_news_frequency",
+                    required: false
+                }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(social_media_politics);
+
+        var daily_social_media_politics = {
+            type: "html-slider-response",
+            stimulus: "If you use social media to <u>view or learn about political content</u> daily or more, use the slider to indicate how many times per day you tend to use social media to view or learn about political content. If you do not use social media to view or learn about political content daily or more, then move the slider to 0.",
+            labels: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            require_movement: false,
+            name: "sm_news_frequency_daily",
+            slider_width: 800,
+            min: 0,
+            max: 100,
+            step: 1,
+            start: 50
+        };
+        timeline.push(daily_social_media_politics);
+        
+         var news_consume = {
+            type: "survey-multi-select",
+            questions: [
+                {
+                    prompt: ['<b>If you share (e.g., share, retweet, repost?) content on social media, why do you typically share it?</b> (Check all that apply)'],
+                    options: ["I want people to see the content", "I want to make people laugh", "I want to change people's opinions", "I want to troll people", "The content represents my beliefs or attitudes", "I want to show people that we share common beliefs or attitudes", "Other"],
+                    horizontal: false,
+                    name: "share_reason",
+                    required: false
+                },
+                {
+                    prompt: ['<b>Please indicate which social media platforms you have used in the past year.</b> (Check all that apply)'],
+                    options: ["Twitter", "Facebook", "Instagram", "TikTok", "YouTube", "Twitch", "Gab", "Parlor", "Other", "None"],
+                    horizontal: false,
+                    name: "sm_platforms",
+                    required: false
+                },
+                {
+                    prompt: ['<b>Please select which news outlets you have read articles from online in the past year.</b> (Check all that apply)'],
+                    options: ["Drudge Report", "Fox News", "Five Thirty Eight", "Yahoo! News", "CNN", "MSN News", "NY Times", "Washington Post", "Daily Knox", "Huffington Post", "Other", "None"],
+                    name: "online_news_outlets",
+                    horizontal: false,
+                    required: false
+                }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(news_consume);
+        
+        var twitter = {
+            type: "survey-text",
+            questions: [
+                    {
+                        prompt: "<b>If you use Twitter, have a public profile, and would like to contribute further to social media and politics research, feel free to enter your Twitter username (e.g. '@username') below. This is completely optional.</b>",
+                        name: "twitter_handle",
+                        required: false
+                    }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(twitter);
+
+        var quiz_seen = {
+            type: "html-button-response",
+            stimulus: function() {
+                return "Here is a quick <b>memory quiz</b>:<br><br><br><br>Did you previously see this tweet?<br><br>" + memory_seen
+            },
+            choices: ["Yes", "No", "Don't know / Unsure"],
+            name: "quiz_seen",
+        };
+        
+        var quiz_unseen = {
+            type: "html-button-response",
+            stimulus: function() {
+                return "Here is a quick <b>memory quiz</b>:<br><br><br><br>Did you previously see this tweet?<br><br>" + memory_unseen
+            },
+            choices: ["Yes", "No", "Don't know / Unsure"],
+            name: "quiz_unseen",
+        };
+        
+        var memory_quiz = jsPsych.randomization.shuffle([quiz_seen, quiz_unseen]);
+        timeline.push(memory_quiz[0]);
+        timeline.push(memory_quiz[1]);
+        
+        
+        var images = ['img/demo_op/Dem_Over_135.png', 'img/demo_op/Dem_Over_42_1.png', 'img/demo_op/Dem_Over_41_1.png', 'img/demo_op/Dem_Over_61_1.png', 'img/demo_op/Dem_Over_189.png', 'img/demo_op/Dem_Over_30.png', 'img/demo_op/Dem_Over_34.png', 'img/demo_op/Dem_Over_51.png', 'img/demo_op/Dem_Over_45.png', 'img/demo_op/Dem_Over_42.png', 'img/demo_up/Dem_Under_172.png', 'img/demo_up/Dem_Under_163.png', 'img/demo_up/Dem_Under_113.png', 'img/demo_up/Dem_Under_95_1.png', 'img/demo_up/Dem_Under_122_1.png', 'img/demo_up/Dem_Under_100_1.png', 'img/demo_up/Dem_Under_131.png', 'img/demo_up/Dem_Under_191.png', 'img/demo_up/Dem_Under_132_1.png', 'img/demo_up/Dem_Under_78_1.png', 'img/rep_op/Rep_Over_69.png', 'img/rep_op/Rep_Over_85.png', 'img/rep_op/Rep_Over_90.png', 'img/rep_op/Rep_Over_143.png', 'img/rep_op/Rep_Over_22.png', 'img/rep_op/Rep_Over_114.png', 'img/rep_op/Rep_Over_35_1.png', 'img/rep_op/Rep_Over_93_1.png', 'img/rep_op/Rep_Over_60.png', 'img/rep_op/Rep_Over_72.png', 'img/rep_up/Rep_Under_36_1.png', 'img/rep_up/Rep_Under_136_1.png', 'img/rep_up/Rep_Under_115_1.png', 'img/rep_up/Rep_Under_101.png', 'img/rep_up/Rep_Under_27.png', 'img/rep_up/Rep_Under_120_1.png', 'img/rep_up/Rep_Under_53.png', 'img/rep_up/Rep_Under_103_1.png', 'img/rep_up/Rep_Under_186.png', 'img/rep_up/Rep_Under_168.png', 'img/mood_6.png', 'img/mood_5.png', 'img/mood_4.png', 'img/mood_1.png', 'img/mood_3.png', 'img/mood_2.png', 'img/barrett.png', 'img/barr.png', 'img/biden_trump.png', 'img/norm_dem/dem_low_103.png', 'img/norm_dem/dem_low_n3.png', 'img/norm_dem/dem_high_10.png', 'img/norm_dem/dem_low_n2.png', 'img/norm_dem/dem_low_n1.png', 'img/norm_dem/dem_low_n4.png', 'img/norm_dem/dem_high_36.png', 'img/norm_dem/dem_high_52.png', 'img/norm_dem/dem_high_93.png', 'img/norm_dem/dem_high_94.png', 'img/norm_rep/rep_high_27_1.png', 'img/norm_rep/rep_low_n3.png', 'img/norm_rep/rep_low_n2.png', 'img/norm_rep/rep_low_n1.png', 'img/norm_rep/rep_high_64_1.png', 'img/norm_rep/rep_high_157.png', 'img/norm_rep/rep_high_26_1.png', 'img/norm_rep/rep_low_122.png', 'img/norm_rep/rep_low_1.png', 'img/norm_rep/rep_high_9_1.png']
+        
+        var prolific= {
+            type: "survey-text",
+            preamble: "",
+            questions: [
+                    {
+                        prompt: "<b>Please enter your Prolific ID below:</b>",
+                        name: "prolific_id",
+                        required: true
+                    }
+                ],
+            button_label: "Finish"
+            };
+        timeline.push(prolific);
+        
+        jsPsych.init({
+            timeline: timeline,
+            preload_images: images,
+            show_preload_progress_bar: true,
+            on_interaction_data_update: function(data) {
+                jsPsych.data.get().push(data)
+            },
+            on_data_update: function() {
+                database.ref(firebase.auth().currentUser.uid).set({
+                    data: jsPsych.data.get().values()
+                });
+            },
+            on_finish: function() {
+                firebase.database().ref(firebase.auth().currentUser.uid).set({
+                    data: jsPsych.data.get().values()
+                })
+                document.body.innerHTML = '<p><p><p align="center">Thank you for participating in the study!<p align="center"><b>You will be automatically re-directed to Prolific in a few moments.</b></p>';
+                setTimeout(function () { location.href = "https://app.prolific.co/submissions/complete?cc=4P2BFNQ2" }, 5000);
+            }
+            //on_finish: function() {
+                //firebase.database().ref(firebase.auth().currentUser.uid).set({
+                    //data: jsPsych.data.get().values()
+                //})
+            //}
+        });
+    </script>
+</html>
