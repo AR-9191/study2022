@@ -154,7 +154,7 @@
                     name: "mood",
                     options: ["<p text-align:center;><img src='img/mood_1.png'>", "<p text-align:center;><img src='img/mood_2.png'>", "<p text-align:center;><img src='img/mood_3.png'>", "<p text-align:center;><img src='img/mood_4.png'>", "<p text-align:center;><img src='img/mood_5.png'>", "<p text-align:center;><img src='img/mood_6.png'>"],
                     horizontal: true,
-                    required: true
+                    required: false
                 }
             ],
             button_label: "Next"
@@ -167,11 +167,10 @@
                     {
                         prompt: "<b>What is your gender?</b>",
                         name: "gender",
-                        required: true
+                        required: false
                     }
                 ],
             button_label: "Next",
-            request_response: true
         };
         timeline.push(gndr);
         
