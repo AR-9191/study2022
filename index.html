@@ -154,9 +154,7 @@
                     name: "mood",
                     options: ["<p text-align:center;><img src='img/mood_1.png'>", "<p text-align:center;><img src='img/mood_2.png'>", "<p text-align:center;><img src='img/mood_3.png'>", "<p text-align:center;><img src='img/mood_4.png'>", "<p text-align:center;><img src='img/mood_5.png'>", "<p text-align:center;><img src='img/mood_6.png'>"],
                     horizontal: true,
-                    required: false,
-                    request_response: true
-
+                    required: true
                 }
             ],
             button_label: "Next"
@@ -169,7 +167,7 @@
                     {
                         prompt: "<b>What is your gender?</b>",
                         name: "gender",
-                        required: false
+                        required: true
                     }
                 ],
             button_label: "Next",
@@ -448,7 +446,7 @@
         
         var instruct = {
             type: "instructions",
-            pages: ["<div class = 'instructions'>Great! You are now ready to begin the task. Press next to see a social media feed from a specific online social network. You will see about 10 Twitter messages (tweets) in total.<br><br><b>Please pay attention and read all the tweets as you will receive a memory test at the end of the task.</b><br><br>Press next to begin.</div>"],
+            pages: ["<div class = 'instructions'>Great! You are now ready to begin the task. Press next to see a real social media for a user from a specific online social network. You will see about 10 Twitter messages (tweets) in total.<br><br><b>Please pay attention and read all the tweets as you will receive a memory test at the end of the task.</b><br><br>Press next to begin.</div>"],
             show_clickable_nav: true
         };
         timeline.push(instruct);
@@ -519,7 +517,7 @@
         
         var transition_1 = {
             type: "instructions",
-            pages: ["<div class = 'instructions'>You just viewed 10 tweets that were sent by people in the same social network. Now please answer some questions about that social network.</div>"],
+            pages: ["<div class = 'instructions'>You just viewed a social media feed of a user from a specific social network. Now please answer some questions about that social network.</div>"],
             show_clickable_nav: true
         };
         timeline.push(transition_1);
