@@ -230,7 +230,7 @@
                     name: "party",
                     options: ["<p text-align:center;>Democrat", "<p text-align:center;>Republican", "<p text-align:center;>An Independent", "<p text-align:center;>Other", "<p text-align:center;>None", "<p text-align:center;>Prefer not to say"],
                     horizontal: true,
-                    required: false
+                    required: true
                 }
             ],
             button_label: "Next"
@@ -261,7 +261,7 @@
         
         var pages_exp = [
             [
-                "<div class = 'instructions'>You are now ready to begin the task. In this task you will view real social media messages sent from an online social network.<br><br>Your job is to <b>pay attention to what types of messages appear in the network</b> (e.g., how do people express themselves?), and then <b>make judgments about what messages seem most appropriate to post</b> in that network.<br><br>The first part of the task is for you to learn information.<br><br>The second task is for you to make judgments about messages you see.<br><br></div>"
+                "<div class = 'instructions'>You are now ready to begin the task, which will involve two parts. <br><br>The first part of the task is for you to learn information.<br><br>In the second part you will make judgments about messages you see.<br><br></div>"
             ],
             [
                  "<div class = 'instructions'>In the first part of the task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.<br><br></div>"
@@ -374,8 +374,17 @@
         }
         
         var pages_p2 = [
+            
+                
             [
-                "<div class = 'instructions'><b>Welcome to the second part of this task.</b><br><br>You will see a real social media feed about politics from the past year, including:<b><ul><li>Amy Coney Barrett Supreme Court confirmation</li><li>William Barr Congressional testimony</li><li>Attitudes toward Donald Trump </li><li>Social media messages targeted at U.S. Senators</li></ul></b>The messages are collected from various people who belong to the same online social network. When you make judgments about the social network, remember to <i>make those judgments independent of whether you agree with the messages that you see</i>.<br><br>Press next to read a quick summary of the topics in case you are not familiar with them. This will help you better understand the context of the tweets.</div>"
+                
+                "<div class = 'instructions'><b>You will now begin the second part of the task.</b><br><br>In the second part of the task, your job is to <b>pay attention to what types of messages appear in the network</b> (e.g., how do people express themselves?), and then <b>make judgments about what messages seem most appropriate to post</b> in that network.</div>"
+
+
+            ],
+            
+            [
+                "<div class = 'instructions'>In this part of the task, you will see a real social media feed containing tweets about politics from the past year, including:<b><ul><li>Amy Coney Barrett Supreme Court confirmation</li><li>William Barr Congressional testimony</li><li>Attitudes toward Donald Trump </li><li>Social media messages targeted at U.S. Senators</li></ul></b>The messages are collected from various people who belong to the same online social network. When you make judgments about the social network, remember to <i>make those judgments independent of whether you agree with the messages that you see</i>.<br><br>Press next to read a quick summary of the topics in case you are not familiar with them. This will help you better understand the context of the tweets.</div>"
             ],
             [
                 "<div class = 'instructions'>You might see tweets about the <b>Amy Coney Barrett Supreme Court confirmation</b>. Amy Coney Barrett is the new <i>conservative</i> Supreme Court justice appointed by President Donald Trump. Her confirmation makes the ideological makeup of Supreme Court lean <i>heavily conservative</i>. Whether or not this is good for America is debated by liberals and conservatives.</div><br><img src='img/barrett.png'>"
@@ -445,7 +454,7 @@
         
         var instruct = {
             type: "instructions",
-            pages: ["<div class = 'instructions'>Great! You are now ready to begin the task. Press next to see a real social media for a user from a specific online social network. You will see about 10 Twitter messages (tweets) in total.<br><br><b>Please pay attention and read all the tweets as you will receive a memory test at the end of the task.</b><br><br>Press next to begin.</div>"],
+            pages: ["<div class = 'instructions'>Great! You are now ready to begin the task. Press next to see a real social media feed for a user from a specific online social network. You will see about 10 Twitter messages (tweets) in total.<br><br><b>Please pay attention and read all the tweets as you will receive a memory test at the end of the task.</b><br><br>Press next to begin.</div>"],
             show_clickable_nav: true
         };
         timeline.push(instruct);
@@ -506,6 +515,7 @@
             name: "scroll_task",
             on_finish: function(data) {
                 data.condition = condition
+                data.intervention = condition_algo
                 data.seen = memory_seen
                 data.unseen = memory_unseen
                 data.scroll = scroll_network
