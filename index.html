@@ -144,7 +144,7 @@
         };
         timeline.push(consent);
         
-
+       
         var mood = {
             type: "survey-multi-choice-bottom-bttn",
             preamble: "We would now like you to answer some questions about yourself.</p><br>",
@@ -157,7 +157,8 @@
                     required: false
                 }
             ],
-            button_label: "Next"
+            button_label: "Next",
+        
         };
         timeline.push(mood);
         
@@ -261,7 +262,7 @@
         
         var pages_exp = [
             [
-                "<div class = 'instructions'>You are now ready to begin the task, which will involve two parts. <br><br>The first part of the task is for you to learn information.<br><br>In the second part you will make judgments about messages you see.<br><br></div>"
+                "<div class = 'instructions'>You are now ready to begin the task, which will involve two parts. <br><br>In the first part of the task, you will learn some information about social media platforms.<br><br>In the second part you will make judgments about messages you see.<br><br></div>"
             ],
             [
                  "<div class = 'instructions'>In the first part of the task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.<br><br></div>"
@@ -299,7 +300,11 @@
                     ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>.</li><br><li><b>Algorithms</b> use online data (e.g., things you have clicked on in the past, what is popular at the moment) to predict the types of posts that are likely to keep you spending more time on the social media platform. </li><br> <li>By promoting certain posts over others, <b>these algorithms amplify the visibility of certain posts while reducing the visibility of others.</b></li><br><li>For example, <b>algorithms may amplify extreme political content more than moderate political content</b>, or they may amplify posts that fit with your opinions more than posts that go against your opinions.</li></ul></div>"],
 
                 ],
-                show_clickable_nav:true
+                show_clickable_nav:true,
+                on_finish: function(data) {
+                data.intervention = condition_algo
+                
+                }
                 
             };
             timeline.push(intervention);
@@ -342,7 +347,11 @@
                     ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>.</li><br><li>These posts can contain images, text, or links to other websites, and can come from people you know or from people you don’t know.</li><br> <li>A user on social media can interact with posts in various ways, such as by <b>commenting, liking or sharing the post</b>.</li><br><li>For example, a user can share a news article they see on their social media newsfeed, and it <b>may be seen by their followers or friends</b>.</li></ul></div>"],
 
                 ],
-                show_clickable_nav:true
+                show_clickable_nav:true,
+                on_finish: function(data) {
+                data.intervention = condition_algo
+                
+                }
                 
             };
             timeline.push(control);
@@ -378,7 +387,7 @@
                 
             [
                 
-                "<div class = 'instructions'><b>You will now begin the second part of the task.</b><br><br>In the second part of the task, your job is to <b>pay attention to what types of messages appear in the network</b> (e.g., how do people express themselves?), and then <b>make judgments about what messages seem most appropriate to post</b> in that network.</div>"
+                "<div class = 'instructions'><b>You will now begin the second part of the task.</b><br><br>In the second part of the task, your job is to <b>pay attention to what types of messages appear in a social media feed</b> (e.g., how do people express themselves?), and then <b>make judgments about what messages seem most appropriate to post</b>.</div>"
 
 
             ],
