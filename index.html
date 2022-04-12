@@ -54,6 +54,7 @@
         <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-html-slider-response.js'></script>
         <script type="text/javascript" src="jspsych-6.1.0/plugins/jspsych-dropdown.js"></script>
         <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-survey-multi-choice-bottom-bttn.js'></script>
+        <script type='text/javascript' src='jspsych-6.1.0/plugins/jspsych-video-keyboard-response.js'></script>
         <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
         
         <!--Choices plugin for dropdown boxes -->
@@ -122,7 +123,8 @@
         timeline.push(welcome);
         
 
-       
+        
+        
         //Function to check whether consent has been given
         var check_consent = function(elem) {
             if (document.getElementById('consent_checkbox').checked) {
@@ -135,6 +137,21 @@
             return false;
         };
         
+        
+        
+        var play_video = {
+            type: 'video-keyboard-response',
+            sources: [
+                'video/algo_lit.mp4'
+            ],
+            width: 1000,
+            height: 750,
+            stop:10,
+            trial_ends_after_video: true
+        };
+        timeline.push(play_video);
+        
+        
         //Presents external consent page to participants
         var consent = {
             type:'external-html',
@@ -144,6 +161,12 @@
         };
         timeline.push(consent);
         
+        var external = {
+            type: 'external-html',
+            url: "https://vimeo.com/698705061",
+            cont_btn: "continue",
+        };
+        timeline.push(external);
        
         var mood = {
             type: "survey-multi-choice-bottom-bttn",
@@ -262,7 +285,7 @@
         
         var pages_exp = [
             [
-                "<div class = 'instructions'>You are now ready to begin the task, which will involve two parts. <br><br>In the first part, you will learn about the types of messages you will view. You will also learn some information about social media platforms.<br><br>In the second part, you will make judgments about the messages you see.<br><br></div>"
+                "<div class = 'instructions'>You are now ready to begin the task, which will involve two parts. <br><br>In the first part, you will learn about the types of messages you will view. You will also learn some information about social media platforms.<br><br>In the second part, you will make judgments about messages you see in a social media newsfeed.<br><br></div>"
             ],
             
               [
@@ -357,15 +380,10 @@
                 type: "instructions",
                 pages: [
                     
-                    ["<div class = 'instructions'>Before you begin the message viewing task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.</div>"],
+                    ["<div class = 'instructions'>Before you begin the newsfeed viewing task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.</div>"],
                     
-                    ["<div class = 'instructions'>Press next to learn about some features of social media.</div>"],
+                    ["<div class = 'instructions'>Press next to view a two-minute video that will teach you about features of social media.</div>"],
                     
-                    ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>. </li></ul></div>"],
-                    
-                    ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>.</li><br><li><b>Algorithms</b> use online data (e.g., things you have clicked on in the past, what is popular at the moment) to predict the types of posts that are likely to keep you spending more time on the social media platform. </li></ul></div>"],
-                    
-                    ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>.</li><br><li><b>Algorithms</b> use online data (e.g., things you have clicked on in the past, what is popular at the moment) to predict the types of posts that are likely to keep you spending more time on the social media platform. </li> <br><li>By promoting certain posts over others, <b>these algorithms amplify the visibility of certain posts while reducing the visibility of others.</b> </li></ul></div>"],
                     
                     ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>.</li><br><li><b>Algorithms</b> use online data (e.g., things you have clicked on in the past, what is popular at the moment) to predict the types of posts that are likely to keep you spending more time on the social media platform. </li><br> <li>By promoting certain posts over others, <b>these algorithms amplify the visibility of certain posts while reducing the visibility of others.</b></li><br><li>For example, <b>algorithms may amplify extreme political content more than moderate political content</b>, or they may amplify posts that fit with your opinions more than posts that go against your opinions.</li></ul></div>"],
 
@@ -409,15 +427,10 @@
                 type: "instructions",
                 pages: [
                     
-                    ["<div class = 'instructions'>Before you begin the message viewing task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.</div>"],
+                    ["<div class = 'instructions'>Before you begin the newsfeed viewing task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.</div>"],
                     
-                    ["<div class = 'instructions'>Press next to learn about some features of social media.</div>"],
+                    ["<div class = 'instructions'>Press next to view a two-minute video that will teach you about features of social media.</div>"],
                     
-                    ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>. </li></ul></div>"],
-                    
-                    ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>.</li><br><li>These posts can contain images, text, or links to other websites, and can come from people you know or from people you don’t know.</li></ul></div>"],
-                    
-                    ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>.</li><br><li>These posts can contain images, text, or links to other websites, and can come from people you know or from people you don’t know.</li> <br><li>A user on social media can interact with posts in various ways, such as by <b>commenting, liking or sharing the post</b>.</li></ul></div>"],
                     
                     ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>.</li><br><li>These posts can contain images, text, or links to other websites, and can come from people you know or from people you don’t know.</li><br> <li>A user on social media can interact with posts in various ways, such as by <b>commenting, liking or sharing the post</b>.</li><br><li>For example, a user can share a news article they see on their social media newsfeed, and it <b>may be seen by their followers or friends</b>.</li></ul></div>"],
 
@@ -462,7 +475,7 @@
         var instruct = {
             type: "instructions",
             pages: [
-                ["<div class = 'instructions'>You will now begin the message viewing task.<br><br> The messages are part of a real social media feed consisting of users from the same online social network. When you make judgments about the social network, remember to <i>make those judgments independent of whether you agree with the messages that you see</i>. <br><br>More specifically, your job is to <b>pay attention to what types of messages appear in the social network</b> (e.g., how do people express themselves?), and then <b>make judgments about what messages seem most appropriate to post in that social network</b>.</div>"],
+                ["<div class = 'instructions'>You will now begin the newsfeed viewing task.<br><br> The messages are part of a real social media newsfeed consisting of users from the same online social network. When you make judgments about the social network, remember to <i>make those judgments independent of whether you agree with the messages that you see</i>. <br><br>More specifically, your job is to <b>pay attention to what types of messages appear in the social network</b> (e.g., how do people express themselves?), and then <b>make judgments about what messages seem most appropriate to post in that social network</b>.</div>"],
 
                 ["<div class = 'instructions'>You will see about 10 Twitter messages (tweets) in total. Please pay attention and read all the tweets as <b>you will receive a memory test at the end</b> of the task.<br><br>Press next to begin.</div>"]
                 ],
@@ -538,7 +551,7 @@
         
         var transition_1 = {
             type: "instructions",
-            pages: ["<div class = 'instructions'>You just viewed a social media feed consisting of users from a specific social network. Now please answer some questions about that social network.</div>"],
+            pages: ["<div class = 'instructions'>You just viewed a social media newsfeed consisting of users from a specific social network. Now please answer some questions about that social network.</div>"],
             show_clickable_nav: true
         };
         timeline.push(transition_1);
