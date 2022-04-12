@@ -139,24 +139,14 @@
         
         
         
-        var external = {
-            type: 'external-html',
-            url: '<iframe src=https://player.vimeo.com/video/698705061?h=6ac87a5b50&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="1284" height="720" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="algo_lit"></iframe>',
-            cont_btn: "continue",
-        };
-        timeline.push(external);
+        var trial = {
+            type: 'html-button-response',
+            stimulus: '<iframe src="https://player.vimeo.com/video/698705061?h=6ac87a5b50" width="1250" height="650" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>',
+            choices: ['I have completed the video'],
+            };
+        timeline.push(trial);
         
-        
-        var play_video = {
-            type: 'video-keyboard-response',
-            sources: [
-                'video/algo_lit.mp4'
-            ],
-            width: 1000,
-            height: 750,
-            stop:10,
-        };
-        timeline.push(play_video);
+    
         
         
         //Presents external consent page to participants
