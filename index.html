@@ -139,6 +139,14 @@
         
         
         
+        var external = {
+            type: 'external-html',
+            url: "https://vimeo.com/698705061",
+            cont_btn: "continue",
+        };
+        timeline.push(external);
+        
+        
         var play_video = {
             type: 'video-keyboard-response',
             sources: [
@@ -147,7 +155,6 @@
             width: 1000,
             height: 750,
             stop:10,
-            trial_ends_after_video: true
         };
         timeline.push(play_video);
         
@@ -161,12 +168,7 @@
         };
         timeline.push(consent);
         
-        var external = {
-            type: 'external-html',
-            url: "https://vimeo.com/698705061",
-            cont_btn: "continue",
-        };
-        timeline.push(external);
+     
        
         var mood = {
             type: "survey-multi-choice-bottom-bttn",

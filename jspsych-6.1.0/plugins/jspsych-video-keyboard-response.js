@@ -147,9 +147,7 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     }
 
     display_element.querySelector('#jspsych-video-keyboard-response-stimulus').onended = function(){
-      if(trial.trial_ends_after_video){
         end_trial();
-      }
     }
 
     if(trial.start !== null){
