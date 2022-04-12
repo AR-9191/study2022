@@ -289,10 +289,10 @@
             
           
             [
-                "<div class = 'instructions'>You might see tweets about the <b>Amy Coney Barrett Supreme Court confirmation</b>. Amy Coney Barrett is the new <i>conservative</i> Supreme Court justice appointed by President Donald Trump. Her confirmation makes the ideological makeup of Supreme Court lean <i>heavily conservative</i>. Whether or not this is good for America is debated by liberals and conservatives.</div><br><img src='img/barrett.png'>"
+                "<div class = 'instructions'>You might see tweets about the <b>Amy Coney Barrett Supreme Court confirmation</b>. Amy Coney Barrett is the a <i>conservative</i> Supreme Court justice appointed by President Donald Trump. Her confirmation makes the ideological makeup of Supreme Court lean <i>heavily conservative</i>. Whether or not this is good for America is debated by liberals and conservatives.</div><br><img src='img/barrett.png'>"
             ],
             [
-                "<div class = 'instructions'>You might see tweets about the <b>William (Bill) Barr testimony to congress</b> in late July, 2020. William Bill Barr is a <i>Republican</i> and <i>conservative</i> U.S. Attorney General, appointed by President Trump. Bill Barr has played a pivotal role in controversial political decisions, such as alleged interventions to soften charges against Trump's political allies and facilitating recent deployment of federal agents in Portland to arrest protesters. During the testimony, Democrats accused Barr of corrupt political actions, while Barr and Republicans claimed the Democrats were making false claims for political gains.</div><br><img src='img/barr.png'>"
+                "<div class = 'instructions'>You might see tweets about the <b>William (Bill) Barr testimony to congress</b> in late July 2020. William Bill Barr is a <i>Republican</i> and <i>conservative</i> U.S. Attorney General, appointed by President Trump. Bill Barr has played a pivotal role in controversial political decisions, such as alleged interventions to soften charges against Trump's political allies and facilitating recent deployment of federal agents in Portland to arrest protesters. During the testimony, Democrats accused Barr of corrupt political actions, while Barr and Republicans claimed the Democrats were making false claims for political gains.</div><br><img src='img/barr.png'>"
             ],
             [
                 "<div class = 'instructions'>You might also see tweets about people's opinions about <b>voting</b>, including discussion of voter turnout, voter suppression etc. You might also see tweets about <b>Trump</b>, <b>Biden</b>, or tweets about other <b>U.S. Senators</b>.</div><br><img src='img/biden_trump.png'>"
@@ -308,16 +308,16 @@
         
         
         var attn_check_options_barrett = [
-                        "Amy Coney Barrett is the newly confirmed conservative Supreme Court Justice",
+                        "Amy Coney Barrett is the confirmed conservative Supreme Court Justice",
                         "Amy Coney Barrett is a retired U.S. Navy Seal who is running for political office",
-                        "Amy Coney Barrett is a former conservative US Attorney General who recently gave testimony to Congress",
+                        "Amy Coney Barrett is a former conservative US Attorney General who gave testimony to Congress",
                         "Amy Coney Barrett is the first female to be appointed as U.S. District Attorney"
                     ]
         
         var attn_check_options_barr = [
-                        "William (Bill) Barr is the newly confirmed conservative Supreme Court Justice",
+                        "William (Bill) Barr is the confirmed conservative Supreme Court Justice",
                         "William (Bill) Barr is a retired U.S. Navy Seal who is running for political office",
-                        "William (Bill) Barr is a former conservative US Attorney General who recently gave testimony to Congress",
+                        "William (Bill) Barr is a former conservative US Attorney General who gave testimony to Congress",
                         "William (Bill) Barr is the first female to be appointed as U.S. District Attorney"
                     ]
         
@@ -403,15 +403,15 @@
             var attn_check_options_intervention = [
                     "The erroneous removal of followers and friends", 
                     "The amplification of some posts and the reduction of others",
-                    "The lucrative profit model that emerges on the platforms naturally",
-                    "The loss of privacy that many users have experienced while using the platforms"
+                    "The origin of modern social media data servers and broadband",
+                    "The new legal ramifications of social media companies terms of use"
                 ]
             
             var attn_check_intervention = {
                 type: "survey-multi-choice",
                 questions: [
                     {
-                        prompt: "<b>Which of the following consequences of social media algorithms did you learn about in the video?</b>",
+                        prompt: "<b>Which of the did you learn about in the video?</b>",
                         name: "attention_check_intervention",
                         options: jsPsych.randomization.sampleWithoutReplacement(attn_check_options_intervention, 4),
                         horizontal: false,
@@ -464,17 +464,17 @@
             timeline.push(control_code);
              
             var attn_check_options_control = [
-                    "Commenting on the post", 
-                    "Liking the post",
-                    "Sharing the post",
-                    "Selling the post for bitcoin"
+                    "The ability users have to commenting, like and share on a post", 
+                    "The ability users have to form romantic connections",
+                    "The ability users have to delete their old account information",
+                    "The ability users have to sell a post for bitcoin"
                 ]
             
             var attn_check_control = {
                 type: "survey-multi-choice",
                 questions: [
                     {
-                        prompt: "<b>Which of the following is NOT a way that people can interact with a post on social media within the platforms?</b>",
+                        prompt: "<b>Which of the following did you learn about in the video?</b>",
                         name: "attention_check_control",
                         options: jsPsych.randomization.sampleWithoutReplacement(attn_check_options_control, 4),
                         horizontal: false,
