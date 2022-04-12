@@ -138,14 +138,6 @@
         };
         
         
-        
-        var trial = {
-            type: 'html-button-response',
-            stimulus: '<iframe src="https://player.vimeo.com/video/698705061?h=6ac87a5b50" width="1250" height="650" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>',
-            choices: ['I have completed the video'],
-            };
-        timeline.push(trial);
-        
     
         
         
@@ -374,10 +366,7 @@
                     
                     ["<div class = 'instructions'>Before you begin the newsfeed viewing task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.</div>"],
                     
-                    ["<div class = 'instructions'>Press next to view a two-minute video that will teach you about features of social media.</div>"],
-                    
-                    
-                    ["<div class = 'instructions'><ul><li>In a user's social media newsfeed (e.g. Twitter home timeline, Facebook timeline) posts are automatically selected and ordered by <b>algorithms</b>.</li><br><li><b>Algorithms</b> use online data (e.g., things you have clicked on in the past, what is popular at the moment) to predict the types of posts that are likely to keep you spending more time on the social media platform. </li><br> <li>By promoting certain posts over others, <b>these algorithms amplify the visibility of certain posts while reducing the visibility of others.</b></li><br><li>For example, <b>algorithms may amplify extreme political content more than moderate political content</b>, or they may amplify posts that fit with your opinions more than posts that go against your opinions.</li></ul></div>"],
+                    ["<div class = 'instructions'>Press next to view a two-minute video that will teach you about features of social media. Once the video is complete, click the button at the bottom of the screen.</div>"],
 
                 ],
                 show_clickable_nav:true,
@@ -388,6 +377,27 @@
                 
             };
             timeline.push(intervention);
+            
+            
+            var algo_vid = {
+                type: 'html-button-response',
+                stimulus: '<iframe src="https://player.vimeo.com/video/698758553?h=d67ac20a71" width="1250" height="650" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>',
+                choices: ['I have completed the video'],
+                };
+            timeline.push(algo_vid);
+            
+            var interv_code= {
+            type: "survey-text",
+            questions: [
+                    {
+                        prompt: "<b>What code did you see at the end of the video?</b>",
+                        name: "completion_code_interv",
+                        required: false
+                    }
+                ],
+            button_label: "Next"
+            };
+            timeline.push(interv_code);
             
              
             var attn_check_options_intervention = [
@@ -401,7 +411,7 @@
                 type: "survey-multi-choice",
                 questions: [
                     {
-                        prompt: "<b>Which of the following consequences of social media algorithms did you read about?</b>",
+                        prompt: "<b>Which of the following consequences of social media algorithms did you learn about in the video?</b>",
                         name: "attention_check_intervention",
                         options: jsPsych.randomization.sampleWithoutReplacement(attn_check_options_intervention, 4),
                         horizontal: false,
@@ -422,9 +432,6 @@
                     ["<div class = 'instructions'>Before you begin the newsfeed viewing task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.</div>"],
                     
                     ["<div class = 'instructions'>Press next to view a two-minute video that will teach you about features of social media.</div>"],
-                    
-                    
-                    ["<div class = 'instructions'><ul><li>In a user’s social media newsfeed (e.g. Twitter home timeline, Facebook timeline), they see posts that have been <b>made by other people</b>.</li><br><li>These posts can contain images, text, or links to other websites, and can come from people you know or from people you don’t know.</li><br> <li>A user on social media can interact with posts in various ways, such as by <b>commenting, liking or sharing the post</b>.</li><br><li>For example, a user can share a news article they see on their social media newsfeed, and it <b>may be seen by their followers or friends</b>.</li></ul></div>"],
 
                 ],
                 show_clickable_nav:true,
@@ -436,6 +443,25 @@
             };
             timeline.push(control);
             
+            var control_vid = {
+                type: 'html-button-response',
+                stimulus: '<iframe src="https://player.vimeo.com/video/698758628?h=5cef71a33e" width="1250" height="650" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>',
+                choices: ['I have completed the video'],
+                };
+            timeline.push(control_vid);
+            
+            var control_code= {
+            type: "survey-text",
+            questions: [
+                    {
+                        prompt: "<b>What code did you see at the end of the video?</b>",
+                        name: "completion_code_control",
+                        required: false
+                    }
+                ],
+            button_label: "Next"
+            };
+            timeline.push(control_code);
              
             var attn_check_options_control = [
                     "Commenting on the post", 
@@ -499,7 +525,7 @@
         var scroll = {
             type: 'html-button-response',
             stimulus: function() {
-                var chosen_party = jsPsych.data.get().last(9).values()[0].responses;
+                var chosen_party = jsPsych.data.get().last(11).values()[0].responses;
                 console.log(chosen_party);
                 if (!chosen_party.includes("Republican") && condition == "op") {
                     scroll_network = jsPsych.randomization.shuffle(demo_op);
