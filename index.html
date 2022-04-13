@@ -170,24 +170,48 @@
         timeline.push(mood);
         
         var gndr= {
-            type: "survey-text",
+            type: "dropdown",
             questions: [
                     {
-                        prompt: "<b>What is your gender?</b>",
+                        text: "<b>What is your gender?</b>",
+                        options:['Male', 'Female', 'Other'],
                         name: "gender",
-                        required: false
+                        required: false,
+                        placeholder: "Select response",
+
                     }
                 ],
             button_label: "Next",
         };
         timeline.push(gndr);
         
+        
+        var gender = jsPsych.data.get().last(1).values()[0].responses;
+
+        
+        if (gender=='Other'){
+            var gndr_other = {
+                type: "survey-text",
+                questions: [
+                    {
+                        prompt: '<b>Please type your gender</b>',
+                        name: 'gender_other',
+                        required: false
+                    }
+                ],
+                button_label: "Next"
+                
+            };
+            timeline.push(gndr_other);
+        }
+        
+        
         var ethnicity = {
             type: "dropdown",
             questions: [
                 {
                     text: "<b>What categories below describe you?</b> Please select all that apply. Click the box below to display all options.",
-                    options: ["American Indian or Alaska Native ", "Asian", "Black or African American", "Hispanic, Latinx, or Spanish origin", "Middle Eastern or North African", "Native Hawaiian or Other Pacific Islander", "White",   "Other", "Prefer not to say"],
+                    options: ["American Indian or Alaska Native ", "Asian", "Black or African American", "Hispanic, Latinx, or Spanish origin", "Middle Eastern or North African", "Native Hawaiian or Other Pacific Islander", "White", "Other", "Prefer not to say"],
                     allowMultipleSelections: true,
                     required: false,
                     placeholder: "Select response",
@@ -195,9 +219,10 @@
 
                 }
             ],
-            request_response: true
         };
         timeline.push(ethnicity);
+      
+        
         
         
         var age= {
@@ -366,7 +391,7 @@
                     
                     ["<div class = 'instructions'>Before you begin the newsfeed viewing task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.</div>"],
                     
-                    ["<div class = 'instructions'>Press next to view a two-minute video that will teach you about features of social media. Once the video is complete, click the button at the bottom of the screen.</div>"],
+                    ["<div class = 'instructions'>Please turn your send on, then press next to view a two-minute video that will teach you about features of social media. Once the video is complete, click the button at the bottom of the screen.</div>"],
 
                 ],
                 show_clickable_nav:true,
@@ -431,7 +456,7 @@
                     
                     ["<div class = 'instructions'>Before you begin the newsfeed viewing task, you will learn about some key features of social media that you might not know about. Then, you will be asked about what you learned.</div>"],
                     
-                    ["<div class = 'instructions'>Press next to view a two-minute video that will teach you about features of social media.</div>"],
+                    ["<div class = 'instructions'>Please turn your sound on, then press next to view a two-minute video that will teach you about features of social media. Once the video is complete, click the button at the bottom of the screen.</div>"],
 
                 ],
                 show_clickable_nav:true,
