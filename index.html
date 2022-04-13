@@ -186,24 +186,22 @@
         timeline.push(gndr);
         
         
-        var gender = jsPsych.data.get().last(1).values()[0].responses;
 
         
-        if (gender=='Other'){
-            var gndr_other = {
+        var gndr_other = {
                 type: "survey-text",
                 questions: [
                     {
-                        prompt: '<b>Please type your gender</b>',
+                        prompt: 'If you selected <b>Other</b>, please write your gender here. Otherwise click <b>Next</b>.',
                         name: 'gender_other',
                         required: false
                     }
                 ],
                 button_label: "Next"
                 
-            };
-            timeline.push(gndr_other);
-        }
+        };
+        timeline.push(gndr_other);
+        
         
         
         var ethnicity = {
@@ -221,6 +219,20 @@
             ],
         };
         timeline.push(ethnicity);
+        
+        var ethn_other = {
+                type: "survey-text",
+                questions: [
+                    {
+                        prompt: 'If you selected <b>Other</b>, please write your ethnicity here. Otherwise click <b>Next</b>.',
+                        name: 'ethnicity_other',
+                        required: false
+                    }
+                ],
+                button_label: "Next"
+                
+        };
+        timeline.push(ethn_other);
       
         
         
@@ -317,7 +329,7 @@
                 "<div class = 'instructions'>You might see tweets about the <b>Amy Coney Barrett Supreme Court confirmation</b>. Amy Coney Barrett is a <i>conservative</i> Supreme Court justice appointed by President Donald Trump. Her confirmation makes the ideological makeup of Supreme Court lean <i>heavily conservative</i>. Whether or not this is good for America is debated by liberals and conservatives.</div><br><img src='img/barrett.png'>"
             ],
             [
-                "<div class = 'instructions'>You might see tweets about the <b>William (Bill) Barr testimony to congress</b> in late July 2020. William Bill Barr is a <i>Republican</i> and <i>conservative</i> U.S. Attorney General, appointed by President Trump. Bill Barr has played a pivotal role in controversial political decisions, such as alleged interventions to soften charges against Trump's political allies and facilitating recent deployment of federal agents in Portland to arrest protesters. During the testimony, Democrats accused Barr of corrupt political actions, while Barr and Republicans claimed the Democrats were making false claims for political gains.</div><br><img src='img/barr.png'>"
+                "<div class = 'instructions'>You might see tweets about the <b>William (Bill) Barr testimony to congress</b> in late July 2020. William Bill Barr was a <i>Republican</i> and <i>conservative</i> U.S. Attorney General, appointed by President Trump. Bill Barr has played a pivotal role in controversial political decisions, such as alleged interventions to soften charges against Trump's political allies and facilitating recent deployment of federal agents in Portland to arrest protesters. During the testimony, Democrats accused Barr of corrupt political actions, while Barr and Republicans claimed the Democrats were making false claims for political gains.</div><br><img src='img/barr.png'>"
             ],
             [
                 "<div class = 'instructions'>You might also see tweets about people's opinions about <b>voting</b>, including discussion of voter turnout, voter suppression etc. You might also see tweets about <b>Trump</b>, <b>Biden</b>, or tweets about other <b>U.S. Senators</b>.</div><br><img src='img/biden_trump.png'>"
@@ -550,7 +562,7 @@
         var scroll = {
             type: 'html-button-response',
             stimulus: function() {
-                var chosen_party = jsPsych.data.get().last(11).values()[0].responses;
+                var chosen_party = jsPsych.data.get().last(12).values()[0].responses;
                 console.log(chosen_party);
                 if (!chosen_party.includes("Republican") && condition == "op") {
                     scroll_network = jsPsych.randomization.shuffle(demo_op);
