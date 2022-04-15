@@ -1297,6 +1297,19 @@
             };
         timeline.push(prolific);
         
+        var comments = {
+            type: "survey-text",
+            questions: [
+                    {
+                        prompt: "<b>If you have any comments on this task, please write them below.</b>",
+                        name: "free_comments",
+                        required: false
+                    }
+                ],
+            button_label: "Next"
+        };
+        timeline.push(twitter);
+        
         jsPsych.init({
             timeline: timeline,
             preload_images: images,
