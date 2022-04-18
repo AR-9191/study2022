@@ -419,7 +419,7 @@
             var algo_vid = {
                 type: 'html-button-response',
                 stimulus: '<iframe src="https://player.vimeo.com/video/698758553?h=d67ac20a71" width="1250" height="650" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>',
-                choices: ['I have completed the video'],
+                choices: ['I completed the video and have the code'],
                 };
             timeline.push(algo_vid);
             
@@ -1228,7 +1228,7 @@
                 },
                 {
                     prompt: ['<b>Please indicate which social media platforms you have used in the past year.</b> (Check all that apply)'],
-                    options: ["Twitter", "Facebook", "Instagram", "TikTok", "YouTube", "Twitch", "Gab", "Parlor", "Other", "None"],
+                    options: ["Twitter", "Facebook", "Instagram", "TikTok", "YouTube", "Twitch", "Gab", "Parler", "Other", "None"],
                     horizontal: false,
                     name: "sm_platforms",
                     required: false
@@ -1308,7 +1308,7 @@
                 ],
             button_label: "Next"
         };
-        timeline.push(twitter);
+        timeline.push(comments);
         
         jsPsych.init({
             timeline: timeline,
