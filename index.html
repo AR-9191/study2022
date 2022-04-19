@@ -182,7 +182,6 @@
                     }
                 ],
             button_label: "Next",
-            superq:
         };
         timeline.push(gndr);
         
@@ -565,14 +564,11 @@
             stimulus: function() {
                 var chosen_party = jsPsych.data.get().last(11).values()[0].responses;
                 console.log(chosen_party);
-                console.log(jsPsych.data.get().last(11).values());
-                console.log(jsPsych.data.get().last(12).values());
-                console.log(jsPsych.data.get().last(13).values());
-                console.log(jsPsych.data.get().last(14).values());
-                console.log(jsPsych.data.get().last(15).values());
-                console.log(jsPsych.data.get().last(16).values());
-
-
+                console.log(jsPsych.data.get().last(11));
+                console.log(jsPsych.data.get().last(12));
+                console.log(jsPsych.data.get().last(13));
+                console.log(jsPsych.data.get().last(14));
+                console.log(jsPsych.data.get().last(15));
                 if (!chosen_party.includes("Republican") && condition == "op") {
                     scroll_network = jsPsych.randomization.shuffle(demo_op);
                     memory_seen = jsPsych.randomization.sampleWithoutReplacement(scroll_network, 1)[0]
