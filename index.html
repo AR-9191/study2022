@@ -564,7 +564,14 @@
             stimulus: function() {
                 var chosen_party = jsPsych.data.get().last(11).values()[0].responses;
                 console.log(chosen_party);
-                console.log(jsPsych.data.get().last(11));
+                console.log(jsPsych.data.get().last(11).values());
+                console.log(jsPsych.data.get().last(1).values());
+                console.log(jsPsych.data.get().last(10).values());
+                console.log(jsPsych.data.get().last(12).values());
+                console.log(jsPsych.data.get().last(5).values());
+                console.log(jsPsych.data.get().last(7).values());
+
+
                 if (!chosen_party.includes("Republican") && condition == "op") {
                     scroll_network = jsPsych.randomization.shuffle(demo_op);
                     memory_seen = jsPsych.randomization.sampleWithoutReplacement(scroll_network, 1)[0]
