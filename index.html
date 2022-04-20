@@ -152,6 +152,8 @@
         
      
        
+        var timestamp = Date.now().toString();
+
         var mood = {
             type: "survey-multi-choice-bottom-bttn",
             preamble: "We would now like you to answer some questions about yourself.</p><br>",
@@ -165,6 +167,9 @@
                 }
             ],
             button_label: "Next",
+            on_finish: function(data) {
+                data.timestamp = timestamp
+            }
         
         };
         timeline.push(mood);
@@ -609,6 +614,7 @@
                 data.unseen = memory_unseen
                 data.scroll = scroll_network
                 data.norm = appropriate_network
+                
             }
         };
         timeline.push(scroll);
